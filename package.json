@@ -1,0 +1,14 @@
+{
+	"dependencies": {
+		"@discordjs/rest": "^2.3.0",
+		"discord-api-types": "^0.37.90",
+		"discord.js": "^14.15.3",
+		"dotenv": "^16.4.5",
+		"nodemon": "^3.1.4"
+	},
+	"scripts": {
+		"dev": "node ./src/index.js",
+		"guild": "node ./src/deploy-commands-guild.js",
+		"deploy cmd": "node ./src/deploy-commands.js"
+	}
+}
