@@ -3,17 +3,30 @@ const {
 	GatewayIntentBits,
 	EmbedBuilder,
 	AttachmentBuilder,
+	Events,
 } = require("discord.js");
 
 require("dotenv").config();
 
 // New client instance
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+	],
 	allowedMentions: { parse: ["users", "roles"] },
 });
 
-client.on("guildMemberAdd", (member) => {
+client.on(Events.MessageCreate, async (message) => {
+	// Purely to test welcome message without having someone actually join, remove eventually
+	if (message.content === "!test-welcome-message") {
+		client.emit("guildMemberAdd", message.member);
+	}
+});
+
+client.on(Events.GuildMemberAdd, (member) => {
 	const welcomeMessage = new EmbedBuilder();
 	const file = new AttachmentBuilder("./src/assets/town.png");
 
@@ -33,7 +46,7 @@ client.on("guildMemberAdd", (member) => {
 			"Please use [this form](https://docs.google.com/forms/d/e/1FAIpQLSf6TuWr4mTZZPI2er-d8yU53G10FJ7jJzsU6Ff5YuBCLG5rKA/viewform) to update your skills. Pax Dei is a game that rewards community and we are building a great one!",
 	});
 
-	const channel = client.channels.cache.get("1251346595543257108");
+	const channel = client.channels.cache.find((c) => c.name === "welcome");
 	channel.send({
 		content: `**Welcome, <@${member.id}> to Moonlight!**`,
 		embeds: [welcomeMessage],
@@ -43,3 +56,5 @@ client.on("guildMemberAdd", (member) => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+console.log("Discord bot running!");
