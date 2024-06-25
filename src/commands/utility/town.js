@@ -14,6 +14,7 @@ module.exports = {
 			.setTitle("Find us along the south east river in Wiht!")
 			.setImage("attachment://discordjs.jpg");
 
+		interaction.client.emit("guildMemberAdd", interaction.user);
 		await interaction.reply({ embeds: [exampleEmbed], files: [file] });
 	},
 };
