@@ -10,7 +10,7 @@
 		"nodemon": "^3.1.4"
 	},
 	"scripts": {
-		"dev": "node ./src/index.js",
+		"dev": "node ./index.js",
 		"guild": "node ./src/deploy-commands-guild.js",
 		"deploy cmd": "node ./src/deploy-commands.js"
 	}
