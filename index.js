@@ -39,7 +39,9 @@ const ROLES = {
 const MESSAGE_FILE = "message-id.json";
 
 client.once("ready", async () => {
-	const channel = await client.channels.cache.find((c) => c.name === "roles");
+	const channel = await client.channels.cache.find(
+		(c) => c.name === "self-roles"
+	);
 	let messageId;
 	if (fs.existsSync(MESSAGE_FILE)) {
 		try {
