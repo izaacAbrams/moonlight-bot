@@ -1,10 +1,4 @@
-const {
-	Client,
-	GatewayIntentBits,
-	EmbedBuilder,
-	AttachmentBuilder,
-	Events,
-} = require("discord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 
 require("dotenv").config();
 
@@ -35,7 +29,6 @@ const ROLES = {
 	"💎": "Jeweler",
 	"🧺": "Gatherer",
 };
-const MESSAGE_FILE = "message-id.json";
 
 client.once("ready", async () => {
 	const channel = await client.channels.cache.find(
@@ -92,41 +85,41 @@ ${roleList.join("\n")}`,
 	});
 });
 
-client.on(Events.MessageCreate, async (message) => {
-	// Purely to test welcome message without having someone actually join, remove eventually
-	if (message.content === "!test-welcome-message") {
-		client.emit("guildMemberAdd", message.member);
-	}
-});
+// client.on(Events.MessageCreate, async (message) => {
+// 	// Purely to test welcome message without having someone actually join, remove eventually
+// 	if (message.content === "!test-welcome-message") {
+// 		client.emit("guildMemberAdd", message.member);
+// 	}
+// });
 
-client.on(Events.GuildMemberAdd, (member) => {
-	const welcomeMessage = new EmbedBuilder();
-	const file = new AttachmentBuilder("./src/assets/town.png");
+// client.on(Events.GuildMemberAdd, (member) => {
+// 	const welcomeMessage = new EmbedBuilder();
+// 	const file = new AttachmentBuilder("./src/assets/town.png");
 
-	welcomeMessage.setDescription(
-		"[Check out our website](https://sites.google.com/view/moonlight-pax-dei/home) for Pax Dei info, clan skills and more!"
-	);
+// 	welcomeMessage.setDescription(
+// 		"[Check out our website](https://sites.google.com/view/moonlight-pax-dei/home) for Pax Dei info, clan skills and more!"
+// 	);
 
-	welcomeMessage.setImage("attachment://discordjs.jpg");
-	welcomeMessage.addFields({
-		name: "Where to find us",
-		value:
-			"We are located in Marrie -> Selene -> Wiht, see image for exact location!",
-	});
-	welcomeMessage.addFields({
-		name: "Keep us updated on your skill progress",
-		value:
-			"Please use [this form](https://docs.google.com/forms/d/e/1FAIpQLSf6TuWr4mTZZPI2er-d8yU53G10FJ7jJzsU6Ff5YuBCLG5rKA/viewform) to update your skills. Pax Dei is a game that rewards community and we are building a great one!",
-	});
+// 	welcomeMessage.setImage("attachment://discordjs.jpg");
+// 	welcomeMessage.addFields({
+// 		name: "Where to find us",
+// 		value:
+// 			"We are located in Marrie -> Selene -> Wiht, see image for exact location!",
+// 	});
+// 	welcomeMessage.addFields({
+// 		name: "Keep us updated on your skill progress",
+// 		value:
+// 			"Please use [this form](https://docs.google.com/forms/d/e/1FAIpQLSf6TuWr4mTZZPI2er-d8yU53G10FJ7jJzsU6Ff5YuBCLG5rKA/viewform) to update your skills. Pax Dei is a game that rewards community and we are building a great one!",
+// 	});
 
-	const channel = client.channels.cache.find((c) => c.name === "welcome");
-	channel.send({
-		content: `**Welcome, <@${member.id}> to Moonlight!**`,
-		embeds: [welcomeMessage],
-		files: [file],
-		allowedMentions: { users: [`${member.id}`] },
-	});
-});
+// 	const channel = client.channels.cache.find((c) => c.name === "welcome");
+// 	channel.send({
+// 		content: `**Welcome, <@${member.id}> to Moonlight!**`,
+// 		embeds: [welcomeMessage],
+// 		files: [file],
+// 		allowedMentions: { users: [`${member.id}`] },
+// 	});
+// });
 
 client.login(process.env.DISCORD_TOKEN);
 
