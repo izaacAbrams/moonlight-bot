@@ -5,7 +5,6 @@ const {
 	AttachmentBuilder,
 	Events,
 } = require("discord.js");
-const fs = require("fs");
 
 require("dotenv").config();
 
@@ -42,55 +41,21 @@ client.once("ready", async () => {
 	const channel = await client.channels.cache.find(
 		(c) => c.name === "self-roles"
 	);
-	let messageId;
-	if (fs.existsSync(MESSAGE_FILE)) {
-		try {
-			const data = fs.readFileSync(MESSAGE_FILE, "utf-8");
-			if (data) {
-				messageId = JSON.parse(data).messageId;
-			} else {
-				console.log("Message file is empty.");
-			}
-		} catch (error) {
-			console.log("Error reading or parsing message file:", error);
-		}
-	} else {
-		console.log("Message file does not exist.");
-	}
 
-	let message;
-	if (messageId) {
-		try {
-			message = await channel.messages.fetch(messageId);
-		} catch (error) {
-			console.log("Message not found, sending a new one.");
-		}
-	}
+	const roleEmojis = Object.keys(ROLES);
+	const roleTitles = Object.values(ROLES);
+	const roleList = roleEmojis.map((emoji, i) => `${emoji} - ${roleTitles[i]}`);
 
-	if (!message) {
-		const roleEmojis = Object.keys(ROLES);
-		const roleTitles = Object.values(ROLES);
-		const roleList = roleEmojis.map(
-			(emoji, i) => `${emoji} - ${roleTitles[i]}`
-		);
-
-		message = await channel.send({
-			content: `React to this message to get your profession roles:
+	const message = await channel.send({
+		content: `React to this message to get your profession roles:
 		 
 ${roleList.join("\n")}`,
-			fetchReply: true,
-		});
+		fetchReply: true,
+	});
 
-		// Save the message ID to a file
-		fs.writeFileSync(
-			MESSAGE_FILE,
-			JSON.stringify({ messageId: await message.id })
-		);
-
-		// React with the specified emojis
-		for (const emoji of Object.keys(ROLES)) {
-			await message.react(emoji);
-		}
+	// React with the specified emojis
+	for (const emoji of Object.keys(ROLES)) {
+		await message.react(emoji);
 	}
 
 	client.on("messageReactionAdd", async (reaction, user) => {
